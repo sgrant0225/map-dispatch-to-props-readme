@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { addTodo } from  './actions/todos';
 import './App.css';
 
 class App extends Component {
@@ -17,11 +18,12 @@ class App extends Component {
   handleOnSubmit = event => {
     event.preventDefault();
     console.log("Todo being added: ", this.state.todo);
-    this.props.dispatch({ type: 'ADD_TODO', todo: this.state.todo });
+    this.props.addTodo(this.state.todo);
     this.setState({ todo: '' });
   }
 
   render() {
+   
     const renderTodos = () => this.props.todos.map(todo => <li key={todo}>{todo}</li>);
     return (
       <div className="App">
@@ -39,12 +41,30 @@ class App extends Component {
       </div>
     );
   }
+ 
+
 };
 
-const mapStateToProps = (state) => {
-  return {
-    todos: state.todos
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     todos: state.todos
+//   };
+// };
 
-export default connect(mapStateToProps)(App);
+// This new function takes in dispatch as an argument
+// It then returns an object that contains a function as a value!
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     addTodo: (todo) => {
+//       dispatch(addTodo(todo))
+//     }
+  
+//   };
+// };
+
+//export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+//instead of call mapStateToProps & mapDispatchToProps we can set the state to an arrow function to connect our app to the store below: 
+//from there make sure to commnet out mapStateToProps & mapDispatchToProps function
+export default connect(state => ({ todos: state.todos }), { addTodo })(App);
